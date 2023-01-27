@@ -130,31 +130,23 @@
 
   {{!-- Stress and Trauma --}}
   <div id="stress-trauma" class="section big-teeth-section">
-    <div id="character-{{_id}}-stress" class="big-teeth">
-      {{#multiboxes system.stress.value}}
-        <input type="radio" id="character-{{_id}}-stress-0" name="system.stress.value" value="0" dtype="Radio">
-        <div id="stress-vice">
-	        <label class="black-label" for="character-{{_id}}-stress-0">{{localize system.stress.name}}</label>
-          <span class="black-label roll-die-attribute rollable-text" data-roll-attribute="vice">{{localize "BITD.Vice"}}</span>
-	      </div>
-        {{#times_from_1 system.stress.max}}
-          <input type="radio" id="character-{{../_id}}-stress-{{this}}" name="system.stress.value" value="{{this}}" dtype="Radio">
-          <label for="character-{{../_id}}-stress-{{this}}"></label>
-        {{/times_from_1}}
-      {{/multiboxes}}
+    <div id="character-{{_id}}-stress" class="big-teeth stress">
+      {{{sav-counter "system.stress.value" system.stress.max system.stress.value _id system.stress.name "vice"}}}
+      <div class="chevron"></div>
     </div>
 
-    <div id="character-{{_id}}-trauma-container" class="small-teeth-container">
+    <div id="character-{{_id}}-trauma-container" class="big-teeth-section">
       {{#traumacounter system.trauma.list system.trauma.max}}
-        <div id="character-{{_id}}-trauma" class="small-teeth-wrap">
-          <label class="black-label" for="character-{{_id}}-trauma-counter-0">{{localize system.trauma.name}}</label>
-          <div id="trauma-teeth" class="small-teeth">
+        <div id="character-{{_id}}-trauma" class="big-teeth trauma">
+          <div id="trauma">
+            <label class="black-label" for="character-{{_id}}-trauma-counter-0">{{localize system.trauma.name}}</label>
+          </div>
             <input type="radio" id="character-{{_id}}-trauma-counter-0" name="system.trauma.value" value="0" data-dtype="Number">
             {{#times_from_1 system.trauma.max}}
               <input type="radio" id="character-{{../_id}}-trauma-counter-{{this}}" name="system.trauma.value" value="{{this}}" disabled>
               <label for="character-{{../_id}}-trauma-counter-{{this}}"></label>
             {{/times_from_1}}
-          </div>
+            <div class="chevron"></div>
         </div>
       {{/traumacounter}}
     </div>
@@ -191,7 +183,7 @@
             <td>{{localize "BITD.NeedHelp"}}</td>
             <td rowspan="3">
               <div id="character-health-clock">
-				        {{{sav-clock "system.healing-clock" system.healing-clockMax system.healing-clock _id}}}
+                {{{sav-clock "system.healing-clock" system.healing-clockMax system.healing-clock _id}}}
               </div>
             </td>
             <td rowspan="3" id="character-armor-uses">

@@ -66,6 +66,38 @@ Hooks.once("init", async function() {
     }
   });
 
+  // Counters for stress, attributes, and xp.
+  Handlebars.registerHelper('sav-counter', function (parameter_name, max_value, current_value, uniq_id, label_name, label_target) {
+    let html = '';
+
+    if (current_value === null) {
+      current_value = 0;
+    }
+
+    if (parseInt(current_value) > parseInt(max_value)) {
+      current_value = max_value;
+    }
+
+    let zero_checked = (parseInt(current_value) === 0) ? 'checked="checked"' : '';
+    html += `<input type="radio" id="character-${uniq_id}-stress-0" name="${parameter_name}" value="0" dtype="Radio" ${zero_checked}>`;
+
+    let label = game.i18n.localize(label_name);
+    html += `
+      <div id="stress-vice">
+        <label class="black-label roll-die-attribute rollable-text" data-roll-attribute="${label_target}">${label}</label>
+      </div>
+    `;
+
+    for (let i = 1; i <= parseInt(max_value); i++) {
+      let checked = (parseInt(current_value) === i) ? 'checked="checked"' : '';
+      html += `
+        <input type="radio" id="character-${uniq_id}-stress-${i}" name="${parameter_name}" value="${i}" dtype="Radio" ${checked}>
+        <label for="character-${uniq_id}-stress-${i}" value="${i}"></label>
+      `;
+    }
+    return html;
+  });
+
   // Multiboxes.
   Handlebars.registerHelper('multiboxes', function(selected, options) {
 
