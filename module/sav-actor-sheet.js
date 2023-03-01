@@ -158,13 +158,11 @@ export class SaVActorSheet extends SaVSheet {
     // manage active effects
     html.find(".effect-control").click(ev => onManageActiveEffect(ev, this.actor));
 
-    html.find(".stress > label[value=1]").click(ev => {
+    html.find(".stress > label[value=1]").click(async ev => {
       if (this.actor.system.stress.value == 1) {
-        this.actor.system.stress.value = 0;
-        this.actor.sheet.render(true);
+        await this.actor.update({ [`system.stress.value`]: 0 });
       } else if (this.actor.system.stress.value == 0) {
-        this.actor.system.stress.value = 1;
-        this.actor.sheet.render(true);
+        await this.actor.update({ [`system.stress.value`]: 1 });
       }
     });
 	}
