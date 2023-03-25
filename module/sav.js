@@ -394,6 +394,68 @@ Hooks.on("preUpdateActor", (actor, data, options, userId) => {
     if ( item !== undefined && game.settings.get("scum-and-villainy", "logResourceToChat") ) {
       SaVHelpers.chatNotify( actorName, resource, oldValue, newValue );
     }
+  } else if ((actor.type === "character") && (Object.keys(data)[0] === "system")) {
+    let item = Object.keys(data.system)[0];
+    console.log("item = " + item);
+    if (item === "description" || item === "harm") { return }
+    let actorName = actor.name;
+    let resource, newValue, oldValue;
+
+    let itemResourceKeys = {
+      "armor-uses": "BITD.ArmorUses",
+      "attributes": "BITD.Attributes",
+      "coins": "BITD.Coin",
+      "coins_stashed": "BITD.Stash",
+      "experience": "BITD.PExperience",
+      "harm": "BITD.Harm",
+      "healing-clock": "BITD.Healing",
+      "loadout": "BITD.Loadout",
+      "stress": "BITD.Stress",
+      "trauma": "BITD.Trauma"
+    }
+
+    if (itemResourceKeys[item] !== undefined) {
+      resource = game.i18n.localize(itemResourceKeys[item])
+    }
+
+    switch (item) {
+      case "attributes": {
+        const attribute = Object.keys(data.system[item])[0]
+        if (data.system[item][attribute]['skills'] !== undefined) {
+          const skill = Object.keys(data.system[item][attribute]['skills'])[0]
+          resource = game.i18n.localize("BITD.Skills" + SaVHelpers.getProperCase(skill))
+          newValue = data.system[item][attribute]['skills'][skill].value
+          oldValue = actor.system[item][attribute]['skills'][skill].value
+        } else {
+          resource = game.i18n.localize("BITD.Skills" + SaVHelpers.getProperCase(attribute))
+          newValue = parseInt(data.system[item][attribute]['exp'])
+          oldValue = parseInt(actor.system[item][attribute]['exp'])
+        }
+        break;
+      }
+      case "harm":
+        console.log(data.system[item])
+        console.log(actor.system[item])
+        break;
+      case "stress":
+        newValue = parseInt(data.system[item].value)
+        oldValue = parseInt(actor.system[item].value)
+        break;
+      case "trauma": {
+        const merged = { ...actor.system[item].list, ...data.system[item].list }
+        newValue = Object.values(merged).filter((v) => v).length
+        oldValue = Object.values(actor.system[item].list).filter((v) => v).length
+        break;
+      }
+      default:
+        newValue = parseInt(data.system[item])
+        oldValue = parseInt(actor.system[item])
+        break;
+    }
+
+    if (item !== undefined && game.settings.get("scum-and-villainy", "logResourceToChat")) {
+      SaVHelpers.chatNotify(actorName, resource, oldValue, newValue);
+    }
   }
 });
 
