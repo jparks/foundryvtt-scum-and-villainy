@@ -437,6 +437,10 @@ Hooks.on("preUpdateActor", (actor, data, options, userId) => {
         console.log(data.system[item])
         console.log(actor.system[item])
         break;
+      case "loadout":
+        newValue = parseInt(data.system[item].planned)
+        oldValue = parseInt(actor.system[item].planned)
+        break;
       case "stress":
         newValue = parseInt(data.system[item].value)
         oldValue = parseInt(actor.system[item].value)
