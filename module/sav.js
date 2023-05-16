@@ -342,6 +342,11 @@ Hooks.on("preUpdateActor", (actor, data, options, userId) => {
         newValue = parseInt( data.system[item] );
         oldValue = parseInt( actor.system[item] );
         break;
+      case "vault":
+        resource = game.i18n.localize("BITD.Vault");
+        newValue = parseInt(data.system[item]);
+        oldValue = parseInt(actor.system[item]);
+        break;
       case "debt":
         resource = game.i18n.localize("BITD.Debt");
         newValue = parseInt( data.system[item] );
