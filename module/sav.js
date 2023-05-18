@@ -327,13 +327,14 @@ Hooks.on("preUpdateActor", (actor, data, options, userId) => {
   if ( ( actor.type === "ship" ) && ( Object.keys(data)[0] === "system" ) ) {
     let item = Object.keys(data.system)[0];
     let item0, item1;
+    let exclude = ["description", "designation", "look"]
+    if (exclude.includes(item)) { return }
     if( item === "systems" ){
       item = Object.keys(data.system.systems)[0];
       if( Object.keys( data.system.systems[item] )[0] === "damage" ){
         item = item + ".damage";
       }
     }
-    if( item === "description" ){ return }
     let actorName = actor.name;
     let resource, newValue, oldValue;
     switch ( item ) {
